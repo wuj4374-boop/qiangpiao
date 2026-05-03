@@ -1,0 +1,69 @@
+# ============================================================
+# 大麦抢票系统 - Git 忽略规则
+# ============================================================
+
+# ── Python ──
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+*.whl
+
+# ── 虚拟环境 ──
+.venv/
+venv/
+env/
+ENV/
+.conda/
+
+# ── 敏感数据（绝对不能提交） ──
+damai_bot/backend/accounts.json
+damai_bot/backend/cookies.json
+damai_bot/backend/cookies/*.json
+*.pem
+*.key
+.env
+.env.*
+
+# ── 用户配置（保留 config.example.json 作为模板） ──
+damai_bot/config.json
+
+# ── 浏览器二进制文件（体积巨大，由 Playwright 自动下载） ──
+ms-playwright/
+chromium-*/
+
+# ── 日志 ──
+logs/
+*.log
+
+# ── 截图（用户产生的数据） ──
+screenshots/
+
+# ── IDE / 编辑器 ──
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Claude Code 本地设置 ──
+.claude/
+
+# ── 操作系统 ──
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ── 临时文件 ──
+*.tmp
+*.bak
+*.cache

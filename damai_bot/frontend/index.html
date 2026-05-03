@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大麦自动抢票工具 v1.0</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎫</text></svg>">
+</head>
+<body>
+    <!-- 免责声明模态框 -->
+    <div id="disclaimerModal" class="modal" style="display: block;">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2><i class="fas fa-exclamation-triangle"></i> 免责声明</h2>
+            </div>
+            <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+                <div class="disclaimer-text">
+                    <h3>重要声明</h3>
+                    <p>本软件为<strong>学习研究用途</strong>而开发，仅供技术交流与学术探讨。使用者应严格遵守以下条款：</p>
+
+                    <ol>
+                        <li><strong>合法性</strong>：使用者必须确保在合法范围内使用本软件，遵守《中华人民共和国网络安全法》及相关法律法规。</li>
+                        <li><strong>使用风险</strong>：本软件可能涉及对第三方网站（大麦网）的自动化访问，使用者需自行承担由此产生的一切法律责任与风险。</li>
+                        <li><strong>责任豁免</strong>：软件开发者和贡献者不对以下情况负责：
+                            <ul>
+                                <li>使用者违反法律法规或网站条款导致的任何后果</li>
+                                <li>因使用本软件造成的账号封禁、财产损失或其他损害</li>
+                                <li>软件错误、漏洞或不可用导致的直接或间接损失</li>
+                                <li>抢票失败或未能达成预期结果</li>
+                            </ul>
+                        </li>
+                        <li><strong>禁止用途</strong>：严禁将本软件用于：
+                            <ul>
+                                <li>商业盈利性抢票、囤票、倒票等非法活动</li>
+                                <li>干扰或破坏大麦网正常运营</li>
+                                <li>任何违反公序良俗或侵害他人权益的行为</li>
+                            </ul>
+                        </li>
+                        <li><strong>技术性质</strong>：本软件模拟人工操作，不保证100%抢票成功。抢票成功率受网络环境、网站反爬策略、服务器负载等多因素影响。</li>
+                        <li><strong>隐私保护</strong>：本软件仅在本地存储必要的登录信息（Cookie），不会收集或上传用户隐私数据。</li>
+                        <li><strong>停止使用</strong>：如大麦网更新页面结构或反爬机制导致软件失效，请停止使用并等待更新。</li>
+                    </ol>
+
+                    <div class="warning-box">
+                        <p><i class="fas fa-radiation"></i> <strong>警告</strong>：使用本软件即表示您已阅读、理解并同意以上所有条款。如不同意，请立即关闭本软件。</p>
+                    </div>
+                </div>
+
+                <div class="disclaimer-agreement">
+                    <label class="checkbox-label" style="font-size: 16px;">
+                        <input type="checkbox" id="agreeCheckbox">
+                        <span>我已阅读、理解并同意以上免责声明，并承诺在法律允许范围内使用本软件进行学习研究。</span>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="disagreeBtn" class="btn btn-danger">
+                    <i class="fas fa-times"></i> 不同意并退出
+                </button>
+                <button id="agreeBtn" class="btn btn-success" disabled>
+                    <i class="fas fa-check"></i> 同意并继续
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" style="display: none;">
+        <!-- 登录面板（初始显示） -->
+        <div id="loginPanel" class="panel">
+            <h1><i class="fas fa-ticket-alt"></i> 大麦自动抢票工具</h1>
+            <p class="subtitle">v1.0 - 极简黑客风格控制面板</p>
+
+            <div class="form-group">
+                <label for="username"><i class="fas fa-user"></i> 用户名</label>
+                <input type="text" id="username" placeholder="admin" value="admin">
+            </div>
+            <div class="form-group">
+                <label for="password"><i class="fas fa-key"></i> 密码</label>
+                <input type="password" id="password" placeholder="admin123" value="admin123">
+            </div>
+            <div class="form-group">
+                <label for="apiUrl"><i class="fas fa-server"></i> API 地址</label>
+                <input type="text" id="apiUrl" placeholder="http://localhost:8000" value="http://localhost:8000">
+            </div>
+            <button id="loginBtn" class="btn btn-primary">
+                <i class="fas fa-sign-in-alt"></i> 登录系统
+            </button>
+            <div class="hint">
+                <i class="fas fa-info-circle"></i> 默认用户: admin / admin123 (从 init_db.py 创建)
+            </div>
+        </div>
+
+        <!-- 大麦网账号管理面板 -->
+        <div id="damaiLoginPanel" class="panel" style="display: none;">
+            <h1><i class="fas fa-users"></i> 大麦网账号管理</h1>
+            <p class="subtitle">管理多个大麦网账号，多账号同时抢票提升成功率</p>
+
+            <div id="accountList" class="account-list">
+                <!-- 动态填充账号卡片 -->
+            </div>
+
+            <div class="damai-login-actions">
+                <button id="addAccountBtn" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> 添加账号
+                </button>
+                <button id="testAllAccountsBtn" class="btn btn-secondary">
+                    <i class="fas fa-vial"></i> 检测全部
+                </button>
+            </div>
+
+            <div id="qrcodeStatus" class="qrcode-status" style="display: none;">
+                <i class="fas fa-spinner fa-spin"></i>
+                <span>请打开大麦APP扫描二维码...</span>
+            </div>
+
+            <div class="button-group" style="margin-top: 20px;">
+                <button id="goToMainBtn" class="btn btn-success" disabled>
+                    <i class="fas fa-arrow-right"></i> 进入抢票
+                </button>
+                <button id="backToLoginBtn" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> 返回登录
+                </button>
+            </div>
+        </div>
+
+        <!-- 主控制面板（登录后显示） -->
+        <div id="mainPanel" class="panel" style="display: none;">
+            <header class="header">
+                <h1><i class="fas fa-ticket-alt"></i> 大麦自动抢票工具</h1>
+                <p class="subtitle">v1.0 - 极简黑客风格控制面板</p>
+                <div class="status-bar">
+                    <span id="connectionStatus" class="status-badge status-disconnected">
+                        <i class="fas fa-plug"></i> 未连接
+                    </span>
+                    <span id="userStatus" class="status-badge">
+                        <i class="fas fa-user"></i> <span id="currentUser">未登录</span>
+                    </span>
+                    <button id="logoutBtn" class="btn-small btn-secondary">
+                        <i class="fas fa-sign-out-alt"></i> 退出
+                    </button>
+                </div>
+            </header>
+
+            <div class="grid-container">
+                <!-- 左侧：任务配置 -->
+                <div class="config-section">
+                    <h2><i class="fas fa-cogs"></i> 任务配置</h2>
+
+                    <div class="form-group">
+                        <label for="eventId"><i class="fas fa-link"></i> 演出链接</label>
+                        <input type="text" id="eventId" placeholder="大麦网演出链接或ID">
+                        <div class="hint">粘贴大麦网演出页面链接或直接输入演出ID</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ticketCount"><i class="fas fa-ticket-alt"></i> 票数</label>
+                        <input type="number" id="ticketCount" value="1" min="1" max="6">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="city"><i class="fas fa-city"></i> 城市</label>
+                        <input type="text" id="city" placeholder="上海">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="attendees"><i class="fas fa-users"></i> 观演人</label>
+                        <div class="attendees-container">
+                            <textarea id="attendees" placeholder="每行一个观演人，格式：姓名,身份证号,手机号&#10;例如：&#10;张三,110101199001011234,13800138000&#10;李四,110101199002021235,13800138001" rows="4"></textarea>
+                            <div class="attendees-buttons">
+                                <button type="button" id="importAttendees" class="btn-small btn-secondary">
+                                    <i class="fas fa-file-import"></i> 导入CSV
+                                </button>
+                                <button type="button" id="clearAttendees" class="btn-small btn-danger">
+                                    <i class="fas fa-trash"></i> 清空
+                                </button>
+                            </div>
+                        </div>
+                        <div class="hint">
+                            支持手动输入或CSV导入。CSV格式：姓名,身份证号,手机号（无表头）
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="session"><i class="fas fa-clock"></i> 场次</label>
+                        <input type="text" id="session" placeholder="19:30">
+                        <div class="hint">多个场次用逗号分隔</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="price"><i class="fas fa-tag"></i> 票价</label>
+                        <input type="text" id="price" placeholder="980,1280">
+                        <div class="hint">多个票价用逗号分隔</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="retryCount"><i class="fas fa-redo"></i> 抢票次数</label>
+                            <input type="number" id="retryCount" value="999" min="1" max="9999">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="refreshInterval"><i class="fas fa-sync-alt"></i> 刷新间隔 (ms)</label>
+                            <input type="number" id="refreshInterval" value="200" min="50" max="5000">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="startTime"><i class="fas fa-calendar-alt"></i> 开票时间 (可选)</label>
+                        <input type="datetime-local" id="startTime">
+                        <div class="hint">留空表示立即开始</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-users"></i> 选择抢票账号</label>
+                        <div id="accountCheckboxes" class="account-checkboxes">
+                            <!-- 动态填充账号复选框 -->
+                        </div>
+                        <div class="hint">勾选参与抢票的账号，所有选中账号将同时抢票</div>
+                    </div>
+
+                    <div class="button-group">
+                        <button id="startBtn" class="btn btn-success">
+                            <i class="fas fa-play"></i> 开始抢票
+                        </button>
+                        <button id="stopBtn" class="btn btn-danger" disabled>
+                            <i class="fas fa-stop"></i> 停止抢票
+                        </button>
+                        <button id="clearLogsBtn" class="btn btn-secondary">
+                            <i class="fas fa-trash"></i> 清空日志
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 右侧：状态和日志 -->
+                <div class="status-section">
+                    <div class="current-status">
+                        <h2><i class="fas fa-chart-line"></i> 系统状态</h2>
+                        <div class="status-display">
+                            <div class="status-item">
+                                <span class="status-label">当前状态:</span>
+                                <span id="currentStatus" class="status-value status-idle">等待中</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">任务ID:</span>
+                                <span id="taskId" class="status-value">-</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">已尝试次数:</span>
+                                <span id="attemptCount" class="status-value">0</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">成功次数:</span>
+                                <span id="successCount" class="status-value">0</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">最后更新:</span>
+                                <span id="lastUpdate" class="status-value">-</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">验证码状态:</span>
+                                <span id="captchaStatus" class="status-value status-idle">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="account-tasks-status" id="accountTasksSection" style="display: none;">
+                        <h2><i class="fas fa-tasks"></i> 多账号任务状态</h2>
+                        <div id="accountTasksList" class="account-tasks-list">
+                            <!-- 动态填充各账号任务状态 -->
+                        </div>
+                    </div>
+
+                    <div class="logs-section">
+                        <div class="logs-header">
+                            <h2><i class="fas fa-terminal"></i> 实时日志</h2>
+                            <div class="logs-controls">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="autoScroll" checked> 自动滚动
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="playSound" checked> 提示音
+                                </label>
+                            </div>
+                        </div>
+                        <div id="logContainer" class="log-container">
+                            <div class="log-entry system">系统启动成功。等待登录...</div>
+                        </div>
+                        <div class="log-footer">
+                            <span id="logCount">日志: 1 条</span>
+                            <span id="lastLogTime">最后日志: -</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer">
+                <div class="stats">
+                    <span><i class="fas fa-database"></i> 后端: <span id="backendStatus">未连接</span></span>
+                    <span><i class="fas fa-bolt"></i> 延迟: <span id="latency">-</span> ms</span>
+                    <span><i class="fas fa-memory"></i> 日志数量: <span id="totalLogs">0</span></span>
+                </div>
+                <div class="version">
+                    v1.0 | 基于 FastAPI + Electron | <span id="currentTime">--:--:--</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 成功提示弹窗 -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-trophy"></i> 抢票成功！</h2>
+                <button id="closeModal" class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>恭喜！抢票任务已成功完成。</p>
+                <div class="success-details">
+                    <p><strong>演出:</strong> <span id="successConcert">-</span></p>
+                    <p><strong>场次:</strong> <span id="successSession">-</span></p>
+                    <p><strong>票价:</strong> <span id="successPrice">-</span> 元</p>
+                    <p><strong>订单链接:</strong> <a id="successOrderLink" href="#" target="_blank">点击查看订单</a></p>
+                </div>
+                <div class="modal-actions">
+                    <button id="playSuccessSound" class="btn btn-success">
+                        <i class="fas fa-volume-up"></i> 播放提示音
+                    </button>
+                    <button id="copyOrderLink" class="btn btn-secondary">
+                        <i class="fas fa-copy"></i> 复制链接
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 音频元素（本地文件，国内网络可用） -->
+    <audio id="successSound" preload="auto">
+        <source src="/assets/success.wav" type="audio/wav">
+    </audio>
+    <audio id="errorSound" preload="auto">
+        <source src="/assets/error.wav" type="audio/wav">
+    </audio>
+    <audio id="startSound" preload="auto">
+        <source src="/assets/start.wav" type="audio/wav">
+    </audio>
+
+    <!-- 脚本 -->
+    <script src="api.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

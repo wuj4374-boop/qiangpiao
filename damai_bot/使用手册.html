@@ -1,0 +1,839 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大麦抢票系统 - 使用手册</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.8;
+            padding: 0;
+        }
+        .header-banner {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            padding: 60px 20px;
+            text-align: center;
+            border-bottom: 3px solid #e94560;
+        }
+        .header-banner h1 {
+            font-size: 42px;
+            color: #fff;
+            margin-bottom: 10px;
+            letter-spacing: 4px;
+        }
+        .header-banner .subtitle {
+            color: #e94560;
+            font-size: 18px;
+            letter-spacing: 2px;
+        }
+        .header-banner .author {
+            color: #888;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+        .header-banner .author span { color: #e94560; font-weight: bold; font-size: 16px; }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .toc {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        .toc h2 { color: #e94560; margin-bottom: 15px; font-size: 22px; }
+        .toc ol { padding-left: 25px; }
+        .toc li { margin: 8px 0; }
+        .toc a { color: #4fc3f7; text-decoration: none; }
+        .toc a:hover { text-decoration: underline; color: #e94560; }
+
+        .section {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .section h2 {
+            color: #e94560;
+            font-size: 24px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+        .section h3 {
+            color: #4fc3f7;
+            font-size: 18px;
+            margin: 20px 0 10px;
+        }
+        .section p { margin: 10px 0; color: #ccc; }
+        .section ul, .section ol { padding-left: 25px; margin: 10px 0; }
+        .section li { margin: 6px 0; color: #bbb; }
+        .section strong { color: #fff; }
+
+        .step-box {
+            background: #1a1a1a;
+            border-left: 4px solid #e94560;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .step-box .step-num {
+            display: inline-block;
+            background: #e94560;
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .step-box .step-title {
+            font-size: 18px;
+            color: #fff;
+            font-weight: bold;
+        }
+        .step-box .step-desc {
+            margin-top: 10px;
+            color: #bbb;
+            padding-left: 40px;
+        }
+
+        .warning-box {
+            background: #2a1a00;
+            border: 1px solid #ff9800;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin: 15px 0;
+        }
+        .warning-box::before { content: " "; }
+
+        .danger-box {
+            background: #2a0a0a;
+            border: 1px solid #e94560;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin: 15px 0;
+        }
+        .danger-box::before { content: " "; }
+
+        .info-box {
+            background: #0a1a2a;
+            border: 1px solid #4fc3f7;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin: 15px 0;
+        }
+        .info-box::before { content: " "; }
+
+        code {
+            background: #1a1a2e;
+            color: #4fc3f7;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: "Consolas", "Courier New", monospace;
+            font-size: 14px;
+        }
+        pre {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            overflow-x: auto;
+            margin: 10px 0;
+            font-family: "Consolas", "Courier New", monospace;
+            font-size: 14px;
+            color: #4fc3f7;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 10px 15px;
+            text-align: left;
+        }
+        th { background: #1a1a2e; color: #e94560; }
+        td { color: #bbb; }
+
+        .disclaimer-full {
+            background: #111;
+            border: 2px solid #e94560;
+            border-radius: 8px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+        .disclaimer-full h3 {
+            color: #e94560;
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+        .disclaimer-full ol { padding-left: 25px; }
+        .disclaimer-full li { margin: 12px 0; color: #ccc; }
+
+        .faq-item {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px 0;
+        }
+        .faq-item .faq-q {
+            color: #4fc3f7;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .faq-item .faq-a {
+            color: #bbb;
+            margin-top: 8px;
+            padding-left: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #555;
+            border-top: 1px solid #222;
+            margin-top: 40px;
+        }
+        .footer .author-mark { color: #e94560; font-weight: bold; }
+
+        .screenshot-placeholder {
+            background: #1a1a2e;
+            border: 2px dashed #333;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            color: #555;
+            margin: 15px 0;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header-banner">
+    <h1>大麦抢票系统</h1>
+    <div class="subtitle">使 用 手 册</div>
+    <div class="author">作者印记: <span>小吴</span> | 版本: v1.0 | 性质: 学习研究专用软件</div>
+</div>
+
+<div class="container">
+
+    <!-- 目录 -->
+    <div class="toc">
+        <h2>目录</h2>
+        <ol>
+            <li><a href="#disclaimer">免责声明</a></li>
+            <li><a href="#intro">软件简介</a></li>
+            <li><a href="#requirements">环境要求</a></li>
+            <li><a href="#install">安装步骤</a></li>
+            <li><a href="#usage">使用教程</a>
+                <ol>
+                    <li><a href="#step1">第一步: 启动软件</a></li>
+                    <li><a href="#step2">第二步: 同意免责声明</a></li>
+                    <li><a href="#step3">第三步: 登录系统</a></li>
+                    <li><a href="#step4">第四步: 添加大麦账号</a></li>
+                    <li><a href="#step5">第五步: 扫码登录大麦网</a></li>
+                    <li><a href="#step6">第六步: 配置抢票任务</a></li>
+                    <li><a href="#step7">第七步: 开始抢票</a></li>
+                    <li><a href="#step8">第八步: 完成支付</a></li>
+                </ol>
+            </li>
+            <li><a href="#config">配置参数说明</a></li>
+            <li><a href="#faq">常见问题</a></li>
+            <li><a href="#troubleshoot">故障排除</a></li>
+            <li><a href="#notes">注意事项</a></li>
+        </ol>
+    </div>
+
+    <!-- 免责声明 -->
+    <div class="section" id="disclaimer">
+        <h2>一、免责声明</h2>
+
+        <div class="disclaimer-full">
+            <h3>免 责 声 明</h3>
+
+            <p><strong>软件名称:</strong> 大麦抢票系统</p>
+            <p><strong>作者印记:</strong> 小吴</p>
+            <p><strong>版本性质:</strong> 学习研究专用软件</p>
+            <br>
+
+            <ol>
+                <li><strong>学习用途:</strong> 本软件为 Python + Playwright 自动化技术的<strong>学习示例项目</strong>，仅供开发者学习 Web 自动化、浏览器控制、前后端交互等技术原理使用，严禁用于任何商业用途或非法用途。</li>
+
+                <li><strong>无服务承诺:</strong> 本软件不提供任何票务抢购、代购、转售等服务，亦不保证任何票务获取的成功率。使用者应自行承担使用本软件所产生的一切后果。</li>
+
+                <li><strong>合法合规:</strong> 使用者应遵守所在国家和地区的法律法规，以及相关平台的用户协议和服务条款。因使用本软件而产生的任何法律纠纷，由使用者自行承担全部责任，与本软件作者无关。</li>
+
+                <li><strong>隐私保护:</strong> 本软件不收集、不存储、不传输任何用户个人信息及账号数据。所有登录凭据均保存在使用者本地设备，不会上传至任何第三方服务器。</li>
+
+                <li><strong>现状提供:</strong> 本软件按"现状"提供，不作任何明示或暗示的保证。作者不对软件的准确性、可靠性、完整性作任何承诺，亦不对因使用或无法使用本软件而造成的任何损失承担责任。</li>
+
+                <li><strong>免费开源:</strong> 本软件完全免费开源，任何以本软件名义进行收费、倒卖、二次分发的行为均与原作者无关。</li>
+            </ol>
+
+            <br>
+            <p style="text-align: center; color: #e94560; font-weight: bold;">
+                如您使用本软件，即表示您已完整阅读、理解并同意上述免责声明的全部内容。
+            </p>
+        </div>
+    </div>
+
+    <!-- 软件简介 -->
+    <div class="section" id="intro">
+        <h2>二、软件简介</h2>
+        <p>本软件是一个基于 <strong>Python + FastAPI + Playwright</strong> 的 Web 自动化学习项目，演示了以下技术原理：</p>
+        <ul>
+            <li>Playwright 浏览器自动化控制</li>
+            <li>FastAPI 后端 API 设计</li>
+            <li>WebSocket 实时通信</li>
+            <li>JWT 身份认证</li>
+            <li>反检测技术（WebDriver 隐藏、指纹伪装等）</li>
+            <li>前端与后端的交互架构</li>
+        </ul>
+
+        <div class="info-box">
+            <strong>工作原理:</strong> 软件通过 Playwright 控制一个真实的 Chromium 浏览器窗口，自动模拟人工操作（点击、选择、提交），使用你自己的大麦网账号完成购票流程。
+        </div>
+    </div>
+
+    <!-- 环境要求 -->
+    <div class="section" id="requirements">
+        <h2>三、环境要求</h2>
+
+        <table>
+            <tr>
+                <th>项目</th>
+                <th>要求</th>
+                <th>说明</th>
+            </tr>
+            <tr>
+                <td>操作系统</td>
+                <td>Windows 10 / 11</td>
+                <td>64 位系统</td>
+            </tr>
+            <tr>
+                <td>Python</td>
+                <td>3.8 及以上</td>
+                <td>推荐 3.10+</td>
+            </tr>
+            <tr>
+                <td>内存</td>
+                <td>4GB 以上</td>
+                <td>浏览器占用较多内存</td>
+            </tr>
+            <tr>
+                <td>网络</td>
+                <td>可访问大麦网</td>
+                <td>国内网络即可</td>
+            </tr>
+            <tr>
+                <td>浏览器</td>
+                <td>项目自带 Chromium</td>
+                <td>无需额外安装</td>
+            </tr>
+        </table>
+
+        <div class="warning-box">
+            <strong>提示:</strong> 如果你的电脑没有安装 Python，请先前往 <code>https://www.python.org/downloads/</code> 下载安装，安装时务必勾选 <strong>"Add Python to PATH"</strong>。
+        </div>
+    </div>
+
+    <!-- 安装步骤 -->
+    <div class="section" id="install">
+        <h2>四、安装步骤</h2>
+
+        <div class="step-box">
+            <span class="step-num">1</span>
+            <span class="step-title">下载并解压软件</span>
+            <div class="step-desc">
+                将整个 <code>damai_bot</code> 文件夹放到你电脑的任意位置（路径中<strong>不要包含中文</strong>）。
+            </div>
+        </div>
+
+        <div class="step-box">
+            <span class="step-num">2</span>
+            <span class="step-title">确认 Python 已安装</span>
+            <div class="step-desc">
+                <p>按 <code>Win + R</code>，输入 <code>cmd</code> 回车，输入以下命令：</p>
+                <pre>python --version</pre>
+                <p>如果显示 <code>Python 3.x.x</code> 说明已安装。如果提示找不到命令，请先安装 Python。</p>
+            </div>
+        </div>
+
+        <div class="step-box">
+            <span class="step-num">3</span>
+            <span class="step-title">双击启动脚本</span>
+            <div class="step-desc">
+                <p>双击 <code>启动抢票系统.bat</code>，脚本会自动：</p>
+                <ul>
+                    <li>检测 Python 环境</li>
+                    <li>检查并安装所需依赖（首次运行需要，使用国内镜像加速）</li>
+                    <li>启动后端服务</li>
+                    <li>自动打开浏览器</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <strong>首次启动较慢:</strong> 第一次运行需要安装依赖包（fastapi、uvicorn、playwright 等），请耐心等待。后续启动会直接跳过安装步骤。
+        </div>
+    </div>
+
+    <!-- 使用教程 -->
+    <div class="section" id="usage">
+        <h2>五、使用教程</h2>
+
+        <!-- 第一步 -->
+        <div id="step1">
+            <h3>第一步: 启动软件</h3>
+            <div class="step-box">
+                <span class="step-num">1</span>
+                <span class="step-title">双击 启动抢票系统.bat</span>
+                <div class="step-desc">
+                    <p>在 <code>damai_bot</code> 文件夹中找到 <code>启动抢票系统.bat</code>，双击运行。</p>
+                    <p>会弹出一个黑色命令行窗口，显示启动信息。启动成功后会自动打开浏览器。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第二步 -->
+        <div id="step2">
+            <h3>第二步: 同意免责声明</h3>
+            <div class="step-box">
+                <span class="step-num">2</span>
+                <span class="step-title">阅读并同意免责声明</span>
+                <div class="step-desc">
+                    <p>命令行窗口会显示免责声明全文，请仔细阅读。</p>
+                    <p>阅读完成后，输入 <code>agree</code> 并按回车键。</p>
+                    <p>输入其他任何内容将退出程序。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第三步 -->
+        <div id="step3">
+            <h3>第三步: 登录系统</h3>
+            <div class="step-box">
+                <span class="step-num">3</span>
+                <span class="step-title">浏览器自动打开，进入登录页面</span>
+                <div class="step-desc">
+                    <p>浏览器会自动打开系统登录页面，使用默认账号登录：</p>
+                    <table>
+                        <tr>
+                            <th>字段</th>
+                            <th>默认值</th>
+                        </tr>
+                        <tr>
+                            <td>用户名</td>
+                            <td><code>admin</code></td>
+                        </tr>
+                        <tr>
+                            <td>密码</td>
+                            <td><code>admin123</code></td>
+                        </tr>
+                        <tr>
+                            <td>API 地址</td>
+                            <td><code>http://localhost:8000</code></td>
+                        </tr>
+                    </table>
+                    <p>直接点击 <strong>"登录系统"</strong> 按钮即可（默认值已填好）。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第四步 -->
+        <div id="step4">
+            <h3>第四步: 添加大麦账号</h3>
+            <div class="step-box">
+                <span class="step-num">4</span>
+                <span class="step-title">进入大麦网账号管理页面</span>
+                <div class="step-desc">
+                    <p>登录后进入<strong>"大麦网账号管理"</strong>页面。</p>
+                    <p>点击 <strong>"添加账号"</strong> 按钮，创建一个新的账号卡槽。</p>
+                    <p>可以添加多个账号，多账号会同时抢票，提升成功率。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第五步 -->
+        <div id="step5">
+            <h3>第五步: 扫码登录大麦网</h3>
+            <div class="step-box">
+                <span class="step-num">5</span>
+                <span class="step-title">扫描二维码登录你的大麦账号</span>
+                <div class="step-desc">
+                    <p>在账号卡片上点击 <strong>"扫码登录"</strong> 按钮。</p>
+                    <p>系统会自动打开大麦网登录页面，页面上会显示二维码。</p>
+                    <p>用手机打开 <strong>大麦APP</strong> 或 <strong>支付宝</strong>，扫描二维码完成登录。</p>
+                    <p>登录成功后，账号卡片会显示你的昵称和"已登录"状态。</p>
+                    <p>至少一个账号登录成功后，<strong>"进入抢票"</strong> 按钮会变为可点击状态。</p>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>注意:</strong> 扫码登录使用的是你的真实大麦网账号。登录后的 Cookie 仅保存在你的电脑本地，不会上传到任何服务器。
+            </div>
+        </div>
+
+        <!-- 第六步 -->
+        <div id="step6">
+            <h3>第六步: 配置抢票任务</h3>
+            <div class="step-box">
+                <span class="step-num">6</span>
+                <span class="step-title">填写抢票配置信息</span>
+                <div class="step-desc">
+                    <p>点击 <strong>"进入抢票"</strong> 后，进入主控制面板。在左侧填写以下信息：</p>
+
+                    <table>
+                        <tr>
+                            <th>字段</th>
+                            <th>说明</th>
+                            <th>示例</th>
+                        </tr>
+                        <tr>
+                            <td><strong>演出链接</strong></td>
+                            <td>粘贴大麦网演出页面的完整链接，或直接输入演出ID</td>
+                            <td><code>https://m.damai.cn/shows/item.html?id=123456</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>票数</strong></td>
+                            <td>需要购买的票数（1-6）</td>
+                            <td><code>2</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>城市</strong></td>
+                            <td>演出所在城市</td>
+                            <td><code>上海</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>观演人</strong></td>
+                            <td>每行一人，格式：姓名,身份证号,手机号</td>
+                            <td><code>张三,110101199001011234,13800138000</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>场次</strong></td>
+                            <td>目标场次时间，多个用逗号分隔</td>
+                            <td><code>19:30</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>票价</strong></td>
+                            <td>目标票价，多个用逗号分隔（按优先级排列）</td>
+                            <td><code>980,1280</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>抢票次数</strong></td>
+                            <td>最大重试次数，默认 999</td>
+                            <td><code>999</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>刷新间隔</strong></td>
+                            <td>每次尝试的间隔（毫秒），越小越快</td>
+                            <td><code>200</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>开票时间</strong></td>
+                            <td>可选，设置后会等到指定时间自动开始抢</td>
+                            <td><code>2026-05-10 10:00</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>选择抢票账号</strong></td>
+                            <td>勾选要参与抢票的已登录账号</td>
+                            <td>默认全选</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>快速获取演出链接:</strong> 在大麦APP或网页中找到目标演出，复制分享链接，粘贴到"演出链接"输入框即可。系统会自动解析演出ID。
+            </div>
+        </div>
+
+        <!-- 第七步 -->
+        <div id="step7">
+            <h3>第七步: 开始抢票</h3>
+            <div class="step-box">
+                <span class="step-num">7</span>
+                <span class="step-title">点击"开始抢票"</span>
+                <div class="step-desc">
+                    <p>确认配置无误后，点击 <strong>"开始抢票"</strong> 按钮。</p>
+                    <p>系统将自动执行以下操作：</p>
+                    <ol>
+                        <li>打开浏览器访问演出页面</li>
+                        <li>自动选择场次和票价</li>
+                        <li>点击购买按钮</li>
+                        <li>自动处理验证码（如有）</li>
+                        <li>自动选择观演人</li>
+                        <li>提交订单</li>
+                    </ol>
+                    <p>右侧的<strong>实时日志</strong>会显示每一步的操作状态。</p>
+                    <p>如果设置了开票时间，系统会先等待，到时间后自动开始。</p>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>多账号模式:</strong> 如果勾选了多个账号，所有账号会同时抢票。一旦某个账号抢票成功，其他账号的任务会自动取消。
+            </div>
+        </div>
+
+        <!-- 第八步 -->
+        <div id="step8">
+            <h3>第八步: 完成支付</h3>
+            <div class="step-box">
+                <span class="step-num">8</span>
+                <span class="step-title">抢票成功后，请尽快完成支付</span>
+                <div class="step-desc">
+                    <p>当系统提示<strong>"抢票成功"</strong>时，会弹出成功窗口，显示：</p>
+                    <ul>
+                        <li>演出名称</li>
+                        <li>场次信息</li>
+                        <li>票价</li>
+                        <li>订单链接</li>
+                    </ul>
+                    <p><strong>请立即在手机上打开大麦APP完成支付！</strong>订单有时间限制，超时会自动取消。</p>
+                    <p>你也可以点击"复制链接"，在浏览器中打开订单页面进行支付。</p>
+                </div>
+            </div>
+
+            <div class="danger-box">
+                <strong>重要:</strong> 软件只负责抢到订单，<strong>付款需要你自己完成</strong>。请务必在规定时间内完成支付，否则订单会被取消。
+            </div>
+        </div>
+    </div>
+
+    <!-- 配置参数说明 -->
+    <div class="section" id="config">
+        <h2>六、配置参数说明</h2>
+
+        <p>除了网页界面的配置外，还可以编辑 <code>config.json</code> 文件进行更详细的设置：</p>
+
+        <h3>6.1 基础配置</h3>
+        <table>
+            <tr><th>参数</th><th>默认值</th><th>说明</th></tr>
+            <tr><td><code>concert.name</code></td><td>""</td><td>演出名称（用于搜索）</td></tr>
+            <tr><td><code>concert.city</code></td><td>""</td><td>城市</td></tr>
+            <tr><td><code>concert.event_id</code></td><td>""</td><td>演出ID（有ID可跳过搜索）</td></tr>
+            <tr><td><code>ticket.prices</code></td><td>[]</td><td>目标票价列表</td></tr>
+            <tr><td><code>ticket.session</code></td><td>""</td><td>目标场次</td></tr>
+            <tr><td><code>ticket.count</code></td><td>1</td><td>购票数量</td></tr>
+        </table>
+
+        <h3>6.2 引擎配置</h3>
+        <table>
+            <tr><th>参数</th><th>默认值</th><th>说明</th></tr>
+            <tr><td><code>engine.retry_count</code></td><td>999</td><td>最大重试次数</td></tr>
+            <tr><td><code>engine.interval</code></td><td>0.3</td><td>重试间隔（秒）</td></tr>
+            <tr><td><code>engine.headless</code></td><td>false</td><td>是否无头模式（不显示浏览器窗口）</td></tr>
+            <tr><td><code>engine.stop_on_success</code></td><td>true</td><td>成功后是否停止</td></tr>
+        </table>
+
+        <h3>6.3 定时抢票</h3>
+        <table>
+            <tr><th>参数</th><th>默认值</th><th>说明</th></tr>
+            <tr><td><code>schedule.enabled</code></td><td>false</td><td>是否启用定时抢票</td></tr>
+            <tr><td><code>schedule.sale_time</code></td><td>""</td><td>开售时间，格式: 2026-05-10 10:00:00</td></tr>
+            <tr><td><code>schedule.advance_seconds</code></td><td>30</td><td>提前多少秒开始准备（提前30秒打开页面）</td></tr>
+        </table>
+
+        <h3>6.4 反检测配置</h3>
+        <table>
+            <tr><th>参数</th><th>默认值</th><th>说明</th></tr>
+            <tr><td><code>anti_detect.enabled</code></td><td>true</td><td>是否启用反检测</td></tr>
+            <tr><td><code>anti_detect.random_delay</code></td><td>true</td><td>是否启用随机延迟</td></tr>
+            <tr><td><code>anti_detect.user_agent_rotate</code></td><td>true</td><td>是否轮换 User-Agent</td></tr>
+        </table>
+    </div>
+
+    <!-- 常见问题 -->
+    <div class="section" id="faq">
+        <h2>七、常见问题</h2>
+
+        <div class="faq-item">
+            <div class="faq-q">Q: 双击 bat 文件没反应怎么办？</div>
+            <div class="faq-a">
+                A: 右键点击 bat 文件，选择"以管理员身份运行"。如果仍然没反应，检查是否安装了 Python 并添加到了 PATH 环境变量。
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-q">Q: 依赖安装失败怎么办？</div>
+            <div class="faq-a">
+                A: 打开命令行，手动执行以下命令：<br>
+                <code>cd damai_bot 目录路径</code><br>
+                <code>pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple</code>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-q">Q: 扫码登录后没有反应？</div>
+            <div class="faq-a">
+                A: 系统每3秒检测一次登录状态，最多等待2分钟。如果超时未检测到，请重新点击"扫码登录"。确保你是用大麦APP或支付宝扫码，而不是微信。
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-q">Q: 抢票一直不成功？</div>
+            <div class="faq-a">
+                A: 抢票成功率受多种因素影响：网络延迟、服务器负载、票务库存、验证码等。建议：<br>
+                1. 使用有线网络而非WiFi<br>
+                2. 减小刷新间隔（但不要低于50ms，否则可能被封）<br>
+                3. 使用多账号同时抢票<br>
+                4. 设置开票时间，提前准备好
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-q">Q: 浏览器打开了但是没有自动操作？</div>
+            <div class="faq-a">
+                A: 可能是大麦网页面结构更新导致选择器失效。检查实时日志中的错误信息。如果是验证码问题，尝试手动完成验证码后让系统继续。
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-q">Q: Cookie 过期了怎么办？</div>
+            <div class="faq-a">
+                A: 回到账号管理页面，重新点击"扫码登录"。Cookie 有效期通常为几小时到一天不等。建议在抢票前重新登录一次确保 Cookie 有效。
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-q">Q: 能同时抢多个不同演出吗？</div>
+            <div class="faq-a">
+                A: 不支持。每个任务只能配置一个演出。如需抢多个演出，可以打开多个浏览器实例（不推荐，可能影响性能）。
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-q">Q: 软件会泄露我的账号密码吗？</div>
+            <div class="faq-a">
+                A: 不会。所有登录信息（Cookie）仅保存在你电脑本地的 <code>cookies</code> 文件夹中，不会上传到任何服务器。软件本身也不收集任何个人信息。
+            </div>
+        </div>
+    </div>
+
+    <!-- 故障排除 -->
+    <div class="section" id="troubleshoot">
+        <h2>八、故障排除</h2>
+
+        <h3>8.1 启动类问题</h3>
+        <table>
+            <tr><th>问题</th><th>原因</th><th>解决方案</th></tr>
+            <tr>
+                <td>找不到 Python</td>
+                <td>未安装 Python 或未添加到 PATH</td>
+                <td>安装 Python 并勾选 "Add to PATH"，或手动编辑 bat 文件指定 Python 路径</td>
+            </tr>
+            <tr>
+                <td>端口 8000 被占用</td>
+                <td>其他程序占用了 8000 端口</td>
+                <td>关闭占用端口的程序，或修改 <code>start_web.py</code> 中的 PORT 值</td>
+            </tr>
+            <tr>
+                <td>依赖安装超时</td>
+                <td>网络问题</td>
+                <td>检查网络连接，或使用代理。也可以手动下载 whl 文件安装</td>
+            </tr>
+        </table>
+
+        <h3>8.2 登录类问题</h3>
+        <table>
+            <tr><th>问题</th><th>原因</th><th>解决方案</th></tr>
+            <tr>
+                <td>扫码后无反应</td>
+                <td>使用了微信扫码</td>
+                <td>必须使用大麦APP或支付宝扫码</td>
+            </tr>
+            <tr>
+                <td>登录状态频繁失效</td>
+                <td>Cookie 过期</td>
+                <td>抢票前重新扫码登录</td>
+            </tr>
+            <tr>
+                <td>浏览器打不开登录页</td>
+                <td>网络问题或 Chromium 异常</td>
+                <td>检查网络连接，删除 <code>ms-playwright</code> 文件夹后重新启动</td>
+            </tr>
+        </table>
+
+        <h3>8.3 抢票类问题</h3>
+        <table>
+            <tr><th>问题</th><th>原因</th><th>解决方案</th></tr>
+            <tr>
+                <td>页面找不到购买按钮</td>
+                <td>大麦网页面更新</td>
+                <td>等待软件更新，或手动在浏览器中操作</td>
+            </tr>
+            <tr>
+                <td>验证码无法自动处理</td>
+                <td>验证码类型不支持</td>
+                <td>尝试手动完成验证码</td>
+            </tr>
+            <tr>
+                <td>提交订单失败</td>
+                <td>库存不足或网络超时</td>
+                <td>系统会自动重试，持续观察日志</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- 注意事项 -->
+    <div class="section" id="notes">
+        <h2>九、注意事项</h2>
+
+        <div class="danger-box">
+            <strong>使用前必读:</strong>
+            <ul>
+                <li>本软件为<strong>学习研究专用</strong>，请勿用于商业或非法用途</li>
+                <li>请遵守大麦网的用户协议和服务条款</li>
+                <li>频繁的自动化操作可能导致账号被风控，请合理使用</li>
+                <li>抢票成功后务必在规定时间内完成支付</li>
+            </ul>
+        </div>
+
+        <div class="warning-box">
+            <strong>使用建议:</strong>
+            <ul>
+                <li>抢票前先用"检测全部"确认所有账号登录状态正常</li>
+                <li>使用有线网络连接，减少网络延迟</li>
+                <li>开票前5分钟启动软件并完成登录</li>
+                <li>观演人信息提前填好，避免抢票时手忙脚乱</li>
+                <li>刷新间隔不要设置太小（建议不低于 100ms），避免触发风控</li>
+                <li>抢票过程中不要手动操作浏览器窗口</li>
+            </ul>
+        </div>
+
+        <div class="info-box">
+            <strong>隐私安全:</strong>
+            <ul>
+                <li>所有数据仅存储在本地电脑，不联网上传</li>
+                <li>Cookie 文件位于 <code>backend/cookies/</code> 目录</li>
+                <li>如需清除登录信息，删除该目录下的 JSON 文件即可</li>
+                <li>截图保存在 <code>screenshots/</code> 目录（如已启用）</li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">
+    <p>大麦抢票系统 v1.0 | 使用手册</p>
+    <p>作者印记: <span class="author-mark">小吴</span></p>
+    <p>本软件仅供学习研究使用，请勿用于非法用途</p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+{
+  "concert": {
+    "name": "演出名称",
+    "city": "城市",
+    "date": "",
+    "event_id": "",
+    "session_id": "",
+    "ticket_id": ""
+  },
+  "ticket": {
+    "prices": [480, 680, 980],
+    "session": "19:30",
+    "count": 1
+  },
+  "schedule": {
+    "enabled": false,
+    "sale_time": "",
+    "advance_seconds": 30
+  },
+  "engine": {
+    "concurrency": 2,
+    "retry_count": 999,
+    "interval": 0.3,
+    "headless": false,
+    "stop_on_success": true
+  },
+  "anti_detect": {
+    "enabled": true,
+    "random_delay": true,
+    "user_agent_rotate": true
+  },
+  "notifications": {
+    "sound": true,
+    "desktop": true
+  },
+  "multiprocessing": {
+    "process_count": 1,
+    "concurrency_per_process": 2,
+    "max_total_concurrency": 2,
+    "process_restart_threshold": 100
+  },
+  "gui": {
+    "theme": "dark",
+    "font_size": 12,
+    "window_width": 1000,
+    "window_height": 700,
+    "auto_start": false
+  },
+  "screenshot": {
+    "enabled": true,
+    "save_path": "./screenshots",
+    "format": "png",
+    "quality": 90,
+    "add_timestamp": true,
+    "add_watermark": false
+  },
+  "auto_reconnect": {
+    "enabled": true,
+    "max_retries": 3,
+    "retry_delay": 1.0,
+    "backoff_factor": 2.0,
+    "network_timeout": 30
+  },
+  "inventory_monitoring": {
+    "enabled": false,
+    "monitoring_interval": 5.0,
+    "monitoring_timeout": 3600
+  },
+  "login": {
+    "auto_refresh": true,
+    "refresh_interval": 300,
+    "cookie_lifetime": 3600,
+    "multi_account": false
+  },
+  "concurrency_control": {
+    "random_delay_enabled": false,
+    "min_delay": 0.1,
+    "max_delay": 1.0,
+    "interval_random_enabled": false,
+    "interval_random_percent": 20,
+    "anti_ban_enabled": true,
+    "max_requests_per_minute": 60,
+    "error_backoff_multiplier": 2.0,
+    "max_errors_before_pause": 10
+  },
+  "viewers": [
+    {
+      "name": "观演人姓名",
+      "id_card": "身份证号码",
+      "phone": "手机号码"
+    }
+  ]
+}
